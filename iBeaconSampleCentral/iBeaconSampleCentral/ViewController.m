@@ -46,6 +46,27 @@
 - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
 {
     [self sendLocalNotificationForMessage:@"Start Monitoring Region"];
+    [self.locationManager requestStateForRegion:self.beaconRegion];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+    switch (state) {
+        case CLRegionStateInside: // リージョン内にいる
+            if ([region isMemberOfClass:[CLBeaconRegion class]] && [CLLocationManager isRangingAvailable]) {
+                [self sendLocalNotificationForMessage:@"State: In Region"];
+                [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+            }
+            break;
+        case CLRegionStateOutside:
+            [self sendLocalNotificationForMessage:@"State: Outside Region"];
+            break;
+        case CLRegionStateUnknown:
+            [self sendLocalNotificationForMessage:@"State: Unknown"];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
