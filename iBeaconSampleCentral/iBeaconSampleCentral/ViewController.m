@@ -89,12 +89,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-    if (beacons.count > 0) {
-        CLBeacon *nearestBeacon = beacons.firstObject;
-        
+    for (CLBeacon *beacon in beacons) {
         NSString *rangeMessage;
         
-        switch (nearestBeacon.proximity) {
+        switch (beacon.proximity) {
             case CLProximityImmediate:
                 rangeMessage = @"Range Immediate: ";
                 break;
@@ -110,7 +108,7 @@
         }
         
         NSString *message = [NSString stringWithFormat:@"major:%@, minor:%@, accuracy:%f, rssi:%ld",
-                             nearestBeacon.major, nearestBeacon.minor, nearestBeacon.accuracy, (long)nearestBeacon.rssi];
+                             beacon.major, beacon.minor, beacon.accuracy, (long)beacon.rssi];
         [self sendLocalNotificationForMessage:[rangeMessage stringByAppendingString:message]];
     }
 }
