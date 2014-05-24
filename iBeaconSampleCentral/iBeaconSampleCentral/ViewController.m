@@ -117,7 +117,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
-    [self sendLocalNotificationForMessage:@"Exit Region"];
+    NSString *message  = [NSString stringWithFormat:@"monitoringDidFailForRegion: desc:%@, ", error.localizedDescription];
+    [self sendLocalNotificationForMessage:message];
 }
 
 #pragma mark - Private methods
